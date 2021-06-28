@@ -5,25 +5,30 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
+import { ErrorInterceptor } from './services/application/error.interceptor';
 import { HttpInterceptorService } from './services/application/http-interceptor.service';
-import { HomeComponent } from './home/home.component';
+import { UsersModule } from './users/users.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     LoginModule,
-    AppRoutingModule
+    UsersModule,
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
       multi: true
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        
     
   ],
   bootstrap: [AppComponent]
