@@ -24,6 +24,10 @@ export class ListComponent implements OnInit {
   }
 
     ngOnInit() {
+        this.searchUsers();
+    }
+
+    private searchUsers() {
         this.userService.getAll()
             .pipe(first())
             .subscribe( (users: any) =>  {
@@ -42,7 +46,12 @@ export class ListComponent implements OnInit {
         user.isDeleting = true;
         this.userService.delete(id)
             .pipe(first())
-            .subscribe(() => this.users.data = this.users.data.filter(x => x.id !== id));
+            .subscribe(() =>  {
+                this.users.data = this.users.data.filter(x => x.id !== id);
+                this.searchUsers();
+            });
+
+        
     }
 
     logout() {

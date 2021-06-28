@@ -9,10 +9,12 @@ import { ErrorInterceptor } from './services/application/error.interceptor';
 import { HttpInterceptorService } from './services/application/http-interceptor.service';
 import { UsersModule } from './users/users.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AlertComponent } from './_components';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,

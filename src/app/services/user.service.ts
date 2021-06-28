@@ -18,12 +18,12 @@ export class UserService {
         return this.http.get<UserDTO>(`${baseUrl}/${id}`);
     }
 
-    create(params: any) {
-        return this.http.post(baseUrl, params);
+    create(userDTO: UserDTO) {
+        return this.http.post(baseUrl, userDTO);
     }
 
-    update(id: string, params: any) {
-        return this.http.put(`${baseUrl}/${id}`, params);
+    update(id: string, userDTO: UserDTO) {
+        return this.http.put(`${baseUrl}/${id}`, userDTO);
     }
 
     delete(id: string) {

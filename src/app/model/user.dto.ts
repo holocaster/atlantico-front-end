@@ -5,8 +5,8 @@ export class UserDTO {
     login!: string;
     password!: string;
     email!: string;
-    createdDate!: string;
-    updateDate!: string;
+    createdDate?: string;
+    updateDate?: string;
     admin!: string;
-    isDeleting: boolean = false;
+    isDeleting?: boolean = false;
 }

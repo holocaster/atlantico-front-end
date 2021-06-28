@@ -5,6 +5,15 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-row">
             <div class="form-group col-5">
+                <label>Login</label>
+                <input type="text" formControlName="login" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.login.errors }" />
+                <div *ngIf="submitted && f.login.errors" class="invalid-feedback">
+                    <div *ngIf="f.login.errors.required">Login obrigatório</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-5">
                 <label>Nome</label>
                 <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
                 <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
@@ -13,7 +22,7 @@
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-7">
+            <div class="form-group col-12">
                 <label>Email</label>
                 <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">

@@ -1,11 +1,11 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { AlertService } from '../services/alert.service';
-import { MustMatch } from '../_helpers';
 import { AuthService } from '../auth/auth.service';
+import { UserDTO } from '../model/user.dto';
 
 
 @Component({ templateUrl: 'add-edit.component.html' })
@@ -41,6 +41,7 @@ export class AddEditComponent implements OnInit {
         if (this.isAddMode) {
             this.form = this.formBuilder.group({
                 name: ['', Validators.required],
+                login: ['', Validators.required],
                 email: ['', [Validators.required, Validators.email]],
                 role: ['', Validators.required],
                 password: ['', [Validators.minLength(6) ,  Validators.required]],
@@ -49,19 +50,24 @@ export class AddEditComponent implements OnInit {
         } else {
             this.form = this.formBuilder.group({
                 name: ['', Validators.required],
+                login: ['', Validators.required],
                 email: ['', [Validators.required, Validators.email]],
                 role: ['', Validators.required],
-                password: ['', [this.isAdmin ? Validators.minLength(6) : Validators.nullValidator, this.isAdmin ? Validators.required : Validators.nullValidator]],
-                confirmPassword: ['', this.isAdmin ? Validators.required : Validators.nullValidator]
-            }, this.isAdmin ? formOptions : null);
+                password: ['', [Validators.nullValidator, Validators.nullValidator]],
+                confirmPassword: ['', Validators.nullValidator]
+            });
         }
 
         if (!this.isAddMode) {
             this.userService.getById(this.id)
                 .pipe(first())
                 .subscribe(x => {
-                    console.log(x);
-                    this.form.patchValue(x)
+                    this.form.patchValue(x);
+                    if (x.admin == 'SIM') {
+                        this.form.controls.role.setValue('Admin');
+                    } else {
+                        this.form.controls.role.setValue('User');
+                    }
                 });
         }
     }
@@ -76,10 +82,19 @@ export class AddEditComponent implements OnInit {
         this.alertService.clear();
 
         // stop here if form is invalid
-        console.log(this.form.invalid);
         if (this.form.invalid) {
-            console.log(this.form.controls);
             return;
+        }
+
+        const password = this.form.controls.password.value;
+        if (password != null) {
+            const matchingControl = this.form.controls['confirmPassword'];
+            if (password !== matchingControl.value) {
+                matchingControl.setErrors({ mustMatch: true });
+                return;
+            } else {
+                matchingControl.setErrors(null);
+            }
         }
 
         this.loading = true;
@@ -90,23 +105,57 @@ export class AddEditComponent implements OnInit {
         }
     }
 
+    private createUserDTO() : UserDTO {
+        return  {
+            admin: this.form.controls.role.value == 'Admin' ? 'SIM': 'NAO',
+            email: this.form.controls.email.value,
+            id: this.id,
+            login: this.form.controls.login.value,
+            name: this.form.controls.name.value,
+            password: this.form.controls.password.value
+        };
+    }
+
     private createUser() {
-        this.userService.create(this.form.value)
+        this.userService.create(this.createUserDTO())
             .pipe(first())
             .subscribe(() => {
-                this.alertService.success('User added', { keepAfterRouteChange: true });
+                this.alertService.success('Usuário adicionado', { keepAfterRouteChange: true });
                 this.router.navigate(['../'], { relativeTo: this.route });
             })
             .add(() => this.loading = false);
     }
 
     private updateUser() {
-        this.userService.update(this.id, this.form.value)
+        this.userService.update(this.id, this.createUserDTO())
             .pipe(first())
             .subscribe(() => {
-                this.alertService.success('User updated', { keepAfterRouteChange: true });
+                this.alertService.success('Usuário alterado', { keepAfterRouteChange: true });
                 this.router.navigate(['../../'], { relativeTo: this.route });
             })
             .add(() => this.loading = false);
+    }
+}
+
+// custom validator to check that two fields match
+export function MustMatch(controlName: string, matchingControlName: string) {
+    return (group: AbstractControl) => {
+        const formGroup = <FormGroup>group;
+        const control = formGroup.controls[controlName];
+        const matchingControl = formGroup.controls[matchingControlName];
+
+        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+            // return if another validator has already found an error on the matchingControl
+            return null;
+        }
+
+        // set error on matchingControl if validation fails
+        if (control.value !== matchingControl.value) {
+            matchingControl.setErrors({ mustMatch: true });
+        } else {
+            matchingControl.setErrors(null);
+        }
+
+        return null;
     }
 }
