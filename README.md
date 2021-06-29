@@ -27,3 +27,6 @@ Projeto responsável pelo front-end do cadastro de usuários
 * Acessar a URL "http://localhost:4200"
 
     * Acessar com usuário "admin" e senha "123"
+    * Acessar 'http://localhost:9411' para zipkin
+    * Acessar 'http://localhost:15672' para rabbitMQ. Colocar guest para usuário e guest para senha
+    * Acessar 'http://localhost:8080/h2-console' para h2-console. Colocar jdbc:h2:mem:testdb para JDBC URL
