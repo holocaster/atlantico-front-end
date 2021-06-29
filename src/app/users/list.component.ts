@@ -9,7 +9,7 @@ import { AuthService } from '../auth/auth.service';
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
 
-    displayedColumns: string[] = ['name', 'email', 'perfil', 'action'];
+    displayedColumns: string[] = ['name', 'login', 'email', 'perfil', 'action'];
     users = new MatTableDataSource<UserDTO>();
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;

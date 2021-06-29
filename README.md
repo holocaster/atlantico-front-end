@@ -11,10 +11,11 @@ Projeto responsável pelo front-end do cadastro de usuários
 
 * Paginação da tabela de usuário vinda do back-end ainda não está totalmente correta. O datatable utilizado, pega toda a lista e faz a paginação em memória ao invez de buscar novamente no back-end. Precisa ser implementado
 * Trocar autenticação e autorização para utilizado o KeycloakSSO. O próprio angular tem vários pacotes no npm para este tipo de funcionalidade
+* Colocar filtro de pesquisa para listar os usuários
 * Melhorar o mapeamente de perfil onde:
     * Usuário comum somente pode alterar o seu usuário
     * Somente usuário administrador pode alterar outros usuários
-    * Soemnte usuário adminsitrador pode mexer no perfil dos outros usuários
+    * Somente usuário adminsitrador pode mexer no perfil dos outros usuários
 
 ## Rodando o projeto
 
