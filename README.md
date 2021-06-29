@@ -1,27 +1,28 @@
 # AtlanticoFrontEnd
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.0.
+Projeto responsável pelo front-end do cadastro de usuários
 
-## Development server
+## Considerações
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* Foi utilizado angular 12 com material design e bootstrap. 
+* Angular-jwt para gerenciamento de token vindo do back-end
 
-## Code scaffolding
+## Pontos de melhoria
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Paginação da tabela de usuário vinda do back-end ainda não está totalmente correta. O datatable utilizado, pega toda a lista e faz a paginação em memória ao invez de buscar novamente no back-end. Precisa ser implementado
+* Trocar autenticação e autorização para utilizado o KeycloakSSO. O próprio angular tem vários pacotes no npm para este tipo de funcionalidade
+* Melhorar o mapeamente de perfil onde:
+    * Usuário comum somente pode alterar o seu usuário
+    * Somente usuário administrador pode alterar outros usuários
+    * Soemnte usuário adminsitrador pode mexer no perfil dos outros usuários
 
-## Build
+## Rodando o projeto
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* Executar "npm i --verbose" para baixar as dependências
+* Executar "npm start"
+* Executar o arquivo [docker](https://github.com/holocaster/atlantico-user-api/blob/master/src/main/docker/docker-compose.yml) para back da aplicação
 
-## Running unit tests
+    * Commando: "docker-compose -f <NOME_ARQUIVO> up -d
+* Acessar a URL "http://localhost:4200"
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+    * Acessar com usuário "admin" e senha "123"
